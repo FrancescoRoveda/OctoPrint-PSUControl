@@ -14,6 +14,15 @@ import threading
 import os
 from flask import make_response, jsonify
 
+import pyfirmata
+from pyfirmata import OUTPUT
+
+board = pyfirmata.Arduino('/dev/ttyUSB1')
+board.digital[3].mode = OUTPUT
+board.digital[4].mode = OUTPUT
+board.digital[5].mode = OUTPUT
+board.digital[6].mode = OUTPUT
+
 try:
     from octoprint.util import ResettableTimer
 except:
@@ -516,14 +525,22 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                     self._reset_idle_timer()
 
             if skipQueuing:
-                return (None,)
+                return (None,)         
 
     def turn_psu_on(self):
         if self.switchingMethod == 'GCODE' or self.switchingMethod == 'GPIO' or self.switchingMethod == 'SYSTEM':
             self._logger.info("Switching PSU On")
             if self.switchingMethod == 'GCODE':
                 self._logger.debug("Switching PSU On Using GCODE: %s" % self.onGCodeCommand)
-                self._printer.commands(self.onGCodeCommand)
+                #self._printer.commands(self.onGCodeCommand)
+                print("-!- Turning PSU on")
+                board.digital[3].write(0)
+                time.sleep(1)
+                board.digital[4].write(0)
+                time.sleep(1)
+                board.digital[5].write(0)
+                time.sleep(1)
+                board.digital[6].write(0)
             elif self.switchingMethod == 'SYSTEM':
                 self._logger.debug("Switching PSU On Using SYSTEM: %s" % self.onSysCommand)
 
@@ -571,7 +588,16 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             self._logger.info("Switching PSU Off")
             if self.switchingMethod == 'GCODE':
                 self._logger.debug("Switching PSU Off Using GCODE: %s" % self.offGCodeCommand)
-                self._printer.commands(self.offGCodeCommand)
+                #self._printer.commands(self.offGCodeCommand)
+                print("-!- Turning PSU off")
+                board.digital[3].write(1)
+                time.sleep(1)
+                board.digital[4].write(1)
+                time.sleep(1)
+                board.digital[5].write(1)
+                time.sleep(1)
+                board.digital[6].write(1)
+
             elif self.switchingMethod == 'SYSTEM':
                 self._logger.debug("Switching PSU Off Using SYSTEM: %s" % self.offSysCommand)
 
