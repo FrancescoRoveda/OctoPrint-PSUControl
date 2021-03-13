@@ -1,7 +1,7 @@
 import pyfirmata
 from pyfirmata import OUTPUT
 
-board = pyfirmata.Arduino('/dev/ttyUSB1')
+board = pyfirmata.Arduino('/dev/ttyUSB001')
 board.digital[3].mode = OUTPUT
 board.digital[4].mode = OUTPUT
 board.digital[5].mode = OUTPUT
