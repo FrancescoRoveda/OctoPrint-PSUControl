@@ -17,11 +17,8 @@ from flask import make_response, jsonify
 import pyfirmata
 from pyfirmata import OUTPUT
 
-board = pyfirmata.Arduino('/dev/ttyUSB1')
-board.digital[3].mode = OUTPUT
-board.digital[4].mode = OUTPUT
-board.digital[5].mode = OUTPUT
-board.digital[6].mode = OUTPUT
+
+
 
 try:
     from octoprint.util import ResettableTimer
@@ -533,7 +530,14 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             if self.switchingMethod == 'GCODE':
                 self._logger.debug("Switching PSU On Using GCODE: %s" % self.onGCodeCommand)
                 #self._printer.commands(self.onGCodeCommand)
-                print("-!- Turning PSU on")
+                print("Initializing Connection")
+                board = pyfirmata.Arduino('/dev/ttyUSB001')
+                board.digital[3].mode = OUTPUT
+                board.digital[4].mode = OUTPUT
+                board.digital[5].mode = OUTPUT
+                board.digital[6].mode = OUTPUT
+                
+                print("Turning PSU on")
                 board.digital[3].write(0)
                 time.sleep(1)
                 board.digital[4].write(0)
@@ -541,6 +545,9 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 board.digital[5].write(0)
                 time.sleep(1)
                 board.digital[6].write(0)
+                
+                print("Closing connection")
+                board.exit()
             elif self.switchingMethod == 'SYSTEM':
                 self._logger.debug("Switching PSU On Using SYSTEM: %s" % self.onSysCommand)
 
@@ -589,7 +596,14 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             if self.switchingMethod == 'GCODE':
                 self._logger.debug("Switching PSU Off Using GCODE: %s" % self.offGCodeCommand)
                 #self._printer.commands(self.offGCodeCommand)
-                print("-!- Turning PSU off")
+                print("Initializing Connection")
+                board = pyfirmata.Arduino('/dev/ttyUSB001')
+                board.digital[3].mode = OUTPUT
+                board.digital[4].mode = OUTPUT
+                board.digital[5].mode = OUTPUT
+                board.digital[6].mode = OUTPUT
+                
+                print("Turning PSU off")
                 board.digital[3].write(1)
                 time.sleep(1)
                 board.digital[4].write(1)
@@ -597,7 +611,10 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 board.digital[5].write(1)
                 time.sleep(1)
                 board.digital[6].write(1)
-
+                
+                print("Closing Connection")
+                board.exit()
+                
             elif self.switchingMethod == 'SYSTEM':
                 self._logger.debug("Switching PSU Off Using SYSTEM: %s" % self.offSysCommand)
 
