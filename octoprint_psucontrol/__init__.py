@@ -121,7 +121,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         self.invertsenseGPIOPin = False
         self.senseGPIOPinPUD = ''
         self.senseSystemCommand = ''
-        self.UsbPort = ''
+        #self.UsbPort = ''
         self.isPSUOn = False
         self._noSensing_isPSUOn = False
         self._check_psu_state_thread = None
