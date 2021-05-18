@@ -121,6 +121,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         self.invertsenseGPIOPin = False
         self.senseGPIOPinPUD = ''
         self.senseSystemCommand = ''
+        self.UsbPort = ''
         self.isPSUOn = False
         self._noSensing_isPSUOn = False
         self._check_psu_state_thread = None
@@ -495,7 +496,8 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 self._waitForHeaters = False
                 return True
             
-            self._logger.info("Waiting for heaters(%s) before shutting off PSU..." % ', '.join(heaters_above_waittemp))
+            #self._logger.info("Waiting for heaters(%s) before shutting off PSU..." % ', '.join(heaters_above_waittemp))
+            self._logger.info(f"Waiting for heaters(${heaters_above_waittemp}) before shutting off PSU... (current: ${temp}, target: ${self.idleTimeoutWaitTemp} )")
             time.sleep(5)
 
     def hook_gcode_queuing(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
