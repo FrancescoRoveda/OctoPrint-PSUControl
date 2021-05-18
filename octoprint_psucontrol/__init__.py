@@ -497,7 +497,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 return True
             
             #self._logger.info("Waiting for heaters(%s) before shutting off PSU..." % ', '.join(heaters_above_waittemp))
-            self._logger.info(f"Waiting for heaters(${heaters_above_waittemp}) before shutting off PSU... (current: ${temp}, target: ${self.idleTimeoutWaitTemp} )")
+            self._logger.info("Waiting for heaters({}) before shutting off PSU... (current: {}, target: {} )".format(heaters_above_waittemp, temp, self.idleTimeoutWaitTemp))
             time.sleep(5)
 
     def hook_gcode_queuing(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
